@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_tf_school_classes_student,tf_school_classes_student,model_tf_school_classes,group_school_student,1,0,0,0
+access_tf_school_person_student,tf_school_person_student,model_tf_school_person,group_school_student,1,0,0,0
+access_tf_school_module_student,tf_school_module_student,model_tf_school_module,group_school_student,1,0,0,0
+access_tf_school_classes_teacher,tf_school_classes_teacher,model_tf_school_classes,group_school_teacher,1,1,1,1
+access_tf_school_person_teacher,tf_school_person_teacher,model_tf_school_person,group_school_teacher,1,1,1,1
+access_tf_school_module_teacher,tf_school_module_teacher,model_tf_school_module,group_school_teacher,1,1,1,1

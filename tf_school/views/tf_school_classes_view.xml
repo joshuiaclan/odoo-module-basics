@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+	<data>
+
+		<record id="tf_school_classes_tree" model="ir.ui.view">
+			<field name="name">tf.school.classes.tree</field>
+			<field name="model">tf.school.classes</field>
+			<field name="priority" eval="10"/>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="name"/>
+					<field name="teacher_id"/>
+					<field name="class_days"/>
+					<field name="start_time" widget="timepicker"/>
+					<field name="end_time" widget="timepicker"/>
+					<field name="semester"/>
+					<field name="school_year"/>
+					<field name="state"/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="tf_school_student_tree" model="ir.ui.view">
+			<field name="name">tf.school.person.tree</field>
+			<field name="model">tf.school.person</field>
+			<field name="priority" eval="10"/>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="name"/>
+					<field name="birthday"/>
+					<field name="age"/>
+					<field name="address" />
+					<field name="age"/>
+					<field name="phone_num" />
+					<field name="email" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="tf_school_teacher_tree" model="ir.ui.view">
+			<field name="name">tf.school.person.tree</field>
+			<field name="model">tf.school.person</field>
+			<field name="priority" eval="10"/>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="name"/>
+					<field name="birthday"/>
+					<field name="address" />
+					<field name="age"/>
+					<field name="phone_num" />
+					<field name="email" />
+				</tree>
+			</field>
+		</record>
+
+		<record id="tf_school_classes_view_form" model="ir.ui.view">
+			<field name="name">tf.school.classes.view.form</field>
+			<field name="model">tf.school.classes</field>
+			<field name="arch" type="xml">
+				<form>
+					<header>
+						<button name="action_start" class="oe_highlight" string="Start Class" type="object" states="draft" groups="tf_school.group_school_teacher" />
+						<button name="action_end" class="oe_highlight" string="Finish Class" type="object" states="in_progress" groups="tf_school.group_school_teacher"/>
+						<button name="%d(tf_school.tf_school_conflict_schedule_form_view)" string="Check Conflicts" type="action" groups="tf_school.group_school_teacher" />
+
+						<field name="state" widget="statusbar" nolabel="1" statusbar_visible="draft,in_progress,done"/>
+					</header>
+					<sheet>
+
+                        <div class="oe_title">
+                            <label for="name" string="Classes"/>
+                            <h1><field name="name" readonly="1"/></h1>
+							<h2>
+								<field name="description" placeholder="Description..."
+									   attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+							</h2>
+                        </div>
+
+						<group>
+							<group>
+								<field name="teacher_id" required="1" class="oe_inline" attrs="{'readonly': [('state', '!=', 'draft')]}" context="{'default_person_type': 'teacher'}"/>
+                            	<field name="class_days" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+								<field name="start_time" required="1" widget="timepicker" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+							</group>
+
+							<group>
+								<field name="school_year" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+								<field name="semester" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+								<field name="end_time" widget="timepicker" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+							</group>
+						</group>
+
+						<notebook>
+							<page name="student_ids" string="Students"
+								  attrs="{'readonly': [('state', '!=', 'draft')]}">
+								<field name="student_ids" nolabel="1"
+									   attrs="{'readonly': [('state', '!=', 'draft')]}"
+									   context="{'default_person_type': 'student'}"
+								/>
+							</page>
+							<page name="module_ids" string="Modules"
+								  attrs="{'readonly': [('state', '!=', 'draft')]}">
+								<field name="module_ids" nolabel="1"
+									   attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+							</page>
+						</notebook>
+
+					</sheet>
+					<div class="oe_chatter">
+						<field name="message_follower_ids" widget="mail_followers"
+							groups="base.group_user" />
+						<field name="activity_ids" widget="mail_activity"/>
+						<field name="message_ids" widget="mail_thread" />
+					</div>
+				</form>
+			</field>
+		</record>
+
+		<record id="tf_school_person_view_form" model="ir.ui.view">
+			<field name="name">tf.school.person.view.form</field>
+			<field name="model">tf.school.person</field>
+			<field name="arch" type="xml">
+				<form>
+					<sheet>
+                        <div class="oe_title">
+                            <label for="name" string="Person"/>
+                            <h1><field name="name" readonly="1"/></h1>
+                        </div>
+
+						<group>
+							<group>
+								<field name="name" />
+								<field name="birthday"/>
+								<field name="address" />
+							</group>
+							<group>
+								<field name="age" />
+								<field name="phone_num" />
+								<field name="email" />
+								<field name="person_type" invisible="1"/>
+                            </group>
+						</group>
+
+						<notebook>
+							<page name="courses_completed" string="Courses Completed" attrs="{'invisible':[('person_type','=','teacher')]}">
+								<field name="courses_completed" nolabel="1" readonly="1">
+									<tree>
+										<field name="name"/>
+										<field name="teacher_id"/>
+										<field name="class_days"/>
+										<field name="semester"/>
+										<field name="school_year"/>
+									</tree>
+								</field>
+							</page>
+							<page name="others" string="Others" >
+								<group >
+									<field name="user_id" />
+								</group>
+							</page>
+						</notebook>
+
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="tf_school_module_view_form" model="ir.ui.view">
+			<field name="name">tf.school.module.view.form</field>
+			<field name="model">tf.school.module</field>
+			<field name="arch" type="xml">
+				<form>
+					<sheet>
+                        <div class="oe_title">
+                            <label for="name" string="Module"/>
+                            <h1><field name="name"/></h1>
+							<h2>
+								<field name="class_id"/>
+							</h2>
+                        </div>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="tf_school_classes_view_filter" model="ir.ui.view">
+            <field name="name">tf.school.classes.view.filter</field>
+            <field name="model">tf.school.classes</field>
+            <field name="arch" type="xml">
+                <search string="Search Classes">
+                    <field name="name" filter_domain="[('name','ilike',self)]"/>
+					<field name="teacher_id" filter_domain="[('teacher_id.name','ilike',self)]"/>
+                    <separator/>
+                    <filter name="my_classes" string="My Classes" />
+					<separator/>
+                </search>
+            </field>
+        </record>
+
+
+		<record id="tf_school_classes_action" model="ir.actions.act_window">
+			<field name="name">Classes</field>
+			<field name="res_model">tf.school.classes</field>
+			<field name="context">{}</field>
+			<field name="domain">[]</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<record id="tf_school_student_action" model="ir.actions.act_window">
+			<field name="name">Student</field>
+			<field name="res_model">tf.school.person</field>
+			<field name="context">{'default_person_type':'teacher'}</field>
+			<field name="domain">[('person_type', '=', 'student')]</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<record id="tf_school_teacher_action" model="ir.actions.act_window">
+			<field name="name">Teacher</field>
+			<field name="res_model">tf.school.person</field>
+			<field name="context">{'default_person_type':'teacher'}</field>
+			<field name="domain">[('person_type', '=', 'teacher')]</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+
+		<menuitem name="School" id="tf_school" web_icon="tf_school,static/description/school_ico.png"  sequence="40"/>
+		<menuitem name="Classes" id="tf_schools_classes" action="tf_school_classes_action"
+			parent="tf_school" sequence="40"/>
+		<menuitem name="Configuration" id="tf_schools_config" parent="tf_school" sequence="50" groups="tf_school.group_school_teacher"/>
+		<menuitem name="Settings" id="tf_schools_settings_menu" parent="tf_schools_config" groups="" sequence="0"/>
+		<menuitem name="Student" id="tf_schools_settings_student" parent="tf_schools_settings_menu" action="tf_school_student_action" sequence="1"/>
+		<menuitem name="Teacher" id="tf_schools_settings_teacher" parent="tf_schools_settings_menu" action="tf_school_teacher_action"  sequence="2"/>
+
+	</data>
+</odoo>

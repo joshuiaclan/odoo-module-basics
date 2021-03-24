@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+    
+        <record id="tf_school_conflict_schedule_form_view" model="ir.ui.view">
+            <field name="name">tf.school.conflict_schedules.form.view</field>
+            <field name="model">tf.school.conflict_schedules</field>
+            <field name="arch" type="xml">
+                <form string="Students With Conflicting Schedule">
+                    <sheet>
+                        <field name="name" placeholder="Testing wizard..." required="1"/>
+                    </sheet>
+                    <footer>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+    </data>
+</odoo>
